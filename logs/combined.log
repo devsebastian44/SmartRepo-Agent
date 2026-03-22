@@ -56,3 +56,55 @@
 {"autoComment":"true","autoLabel":"true","env":"development","level":"info","message":"🤖 GitHub AI Bot running on port 3000","service":"github-ai-bot","timestamp":"2026-03-21 21:08:15"}
 {"autoComment":"true","autoLabel":"true","env":"development","level":"info","message":"🤖 GitHub AI Bot running on port 3000","service":"github-ai-bot","timestamp":"2026-03-21 21:08:16"}
 {"autoComment":"true","autoLabel":"true","env":"development","level":"info","message":"🤖 GitHub AI Bot running on port 3000","service":"github-ai-bot","timestamp":"2026-03-21 21:08:28"}
+{"level":"warn","message":"Webhook signature length mismatch","service":"github-ai-bot","timestamp":"2026-03-21 22:53:52"}
+{"level":"warn","message":"Webhook rejected: missing X-Hub-Signature-256 header","service":"github-ai-bot","timestamp":"2026-03-21 22:53:52"}
+{"level":"warn","message":"Webhook rejected: missing X-Hub-Signature-256 header","service":"github-ai-bot","timestamp":"2026-03-21 22:53:52"}
+{"level":"warn","message":"Webhook rejected: missing X-Hub-Signature-256 header","service":"github-ai-bot","timestamp":"2026-03-21 22:53:52"}
+{"level":"error","message":"GITHUB_WEBHOOK_SECRET is not set – cannot validate webhooks","service":"github-ai-bot","timestamp":"2026-03-21 22:53:53"}
+{"confidence":"80%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 22:53:52","title":"App crashes when clicking login","type":"bug"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":5,"service":"github-ai-bot","timestamp":"2026-03-21 22:53:52","title":"Upload button not working","type":"bug"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":5,"service":"github-ai-bot","timestamp":"2026-03-21 22:53:53","title":"Feature request: add dark mode","type":"feature"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 22:53:53","title":"Support for multiple themes","type":"feature"}
+{"confidence":"44%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 22:53:53","title":"How do I configure the timeout?","type":"question"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":6,"service":"github-ai-bot","timestamp":"2026-03-21 22:53:53","title":"Security vulnerability: XSS in comment field","type":"security"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":1,"service":"github-ai-bot","timestamp":"2026-03-21 22:53:53","title":"Some issue","type":"bug"}
+{"confidence":"67%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 22:53:53","title":"Bug with feature request","type":"feature"}
+{"level":"warn","message":"Webhook signature length mismatch","service":"github-ai-bot","timestamp":"2026-03-21 22:55:18"}
+{"level":"warn","message":"Webhook rejected: missing X-Hub-Signature-256 header","service":"github-ai-bot","timestamp":"2026-03-21 22:55:18"}
+{"level":"warn","message":"Webhook rejected: missing X-Hub-Signature-256 header","service":"github-ai-bot","timestamp":"2026-03-21 22:55:18"}
+{"level":"warn","message":"Webhook rejected: missing X-Hub-Signature-256 header","service":"github-ai-bot","timestamp":"2026-03-21 22:55:18"}
+{"level":"error","message":"GITHUB_WEBHOOK_SECRET is not set – cannot validate webhooks","service":"github-ai-bot","timestamp":"2026-03-21 22:55:18"}
+{"confidence":"80%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 22:55:18","title":"App crashes when clicking login","type":"bug"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":5,"service":"github-ai-bot","timestamp":"2026-03-21 22:55:18","title":"Upload button not working","type":"bug"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":5,"service":"github-ai-bot","timestamp":"2026-03-21 22:55:18","title":"Feature request: add dark mode","type":"feature"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 22:55:18","title":"Support for multiple themes","type":"feature"}
+{"confidence":"44%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 22:55:18","title":"How do I configure the timeout?","type":"question"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":6,"service":"github-ai-bot","timestamp":"2026-03-21 22:55:18","title":"Security vulnerability: XSS in comment field","type":"security"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":1,"service":"github-ai-bot","timestamp":"2026-03-21 22:55:18","title":"Some issue","type":"bug"}
+{"confidence":"67%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 22:55:18","title":"Bug with feature request","type":"feature"}
+{"level":"warn","message":"Webhook signature length mismatch","service":"github-ai-bot","timestamp":"2026-03-21 22:56:48"}
+{"level":"warn","message":"Webhook rejected: missing X-Hub-Signature-256 header","service":"github-ai-bot","timestamp":"2026-03-21 22:56:48"}
+{"level":"warn","message":"Webhook rejected: missing X-Hub-Signature-256 header","service":"github-ai-bot","timestamp":"2026-03-21 22:56:48"}
+{"level":"warn","message":"Webhook rejected: missing X-Hub-Signature-256 header","service":"github-ai-bot","timestamp":"2026-03-21 22:56:48"}
+{"level":"error","message":"GITHUB_WEBHOOK_SECRET is not set – cannot validate webhooks","service":"github-ai-bot","timestamp":"2026-03-21 22:56:48"}
+{"confidence":"80%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 22:56:48","title":"App crashes when clicking login","type":"bug"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":5,"service":"github-ai-bot","timestamp":"2026-03-21 22:56:48","title":"Upload button not working","type":"bug"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":5,"service":"github-ai-bot","timestamp":"2026-03-21 22:56:48","title":"Feature request: add dark mode","type":"feature"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 22:56:48","title":"Support for multiple themes","type":"feature"}
+{"confidence":"44%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 22:56:48","title":"How do I configure the timeout?","type":"question"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":6,"service":"github-ai-bot","timestamp":"2026-03-21 22:56:48","title":"Security vulnerability: XSS in comment field","type":"security"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":1,"service":"github-ai-bot","timestamp":"2026-03-21 22:56:48","title":"Some issue","type":"bug"}
+{"confidence":"67%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 22:56:48","title":"Bug with feature request","type":"feature"}
+{"level":"warn","message":"Webhook signature length mismatch","service":"github-ai-bot","timestamp":"2026-03-21 23:00:00"}
+{"level":"warn","message":"Webhook rejected: missing X-Hub-Signature-256 header","service":"github-ai-bot","timestamp":"2026-03-21 23:00:00"}
+{"level":"warn","message":"Webhook rejected: missing X-Hub-Signature-256 header","service":"github-ai-bot","timestamp":"2026-03-21 23:00:00"}
+{"level":"warn","message":"Webhook rejected: missing X-Hub-Signature-256 header","service":"github-ai-bot","timestamp":"2026-03-21 23:00:00"}
+{"level":"error","message":"GITHUB_WEBHOOK_SECRET is not set – cannot validate webhooks","service":"github-ai-bot","timestamp":"2026-03-21 23:00:00"}
+{"confidence":"80%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 23:00:00","title":"App crashes when clicking login","type":"bug"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":5,"service":"github-ai-bot","timestamp":"2026-03-21 23:00:00","title":"Upload button not working","type":"bug"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":5,"service":"github-ai-bot","timestamp":"2026-03-21 23:00:00","title":"Feature request: add dark mode","type":"feature"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 23:00:00","title":"Support for multiple themes","type":"feature"}
+{"confidence":"44%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 23:00:00","title":"How do I configure the timeout?","type":"question"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":6,"service":"github-ai-bot","timestamp":"2026-03-21 23:00:00","title":"Security vulnerability: XSS in comment field","type":"security"}
+{"confidence":"100%","level":"info","message":"Issue classified","score":1,"service":"github-ai-bot","timestamp":"2026-03-21 23:00:00","title":"Some issue","type":"bug"}
+{"confidence":"67%","level":"info","message":"Issue classified","score":4,"service":"github-ai-bot","timestamp":"2026-03-21 23:00:00","title":"Bug with feature request","type":"feature"}

@@ -4,20 +4,20 @@
  * All GitHub API calls are centralised here to keep controllers clean.
  */
 
-const { Octokit } = require('@octokit/rest');
-const logger       = require('../utils/logger');
+const { Octokit } = require('@octokit/rest')
+const logger = require('../utils/logger')
 
 const octokit = new Octokit({
-  auth       : process.env.GITHUB_TOKEN,
-  userAgent  : 'github-ai-automation-bot/1.0.0',
-  timeZone   : 'UTC',
-  log        : {
-    debug: (msg) => logger.debug(msg),
-    info : (msg) => logger.info(msg),
-    warn : (msg) => logger.warn(msg),
-    error: (msg) => logger.error(msg),
+  auth: process.env.GITHUB_TOKEN,
+  userAgent: 'github-ai-automation-bot/1.0.0',
+  timeZone: 'UTC',
+  log: {
+    debug: msg => logger.debug(msg),
+    info: msg => logger.info(msg),
+    warn: msg => logger.warn(msg),
+    error: msg => logger.error(msg),
   },
-});
+})
 
 // ── Comments ──────────────────────────────────────────────────────────────────
 
@@ -31,12 +31,12 @@ async function createComment({ owner, repo, issueNumber, body }) {
       repo,
       issue_number: issueNumber,
       body,
-    });
-    logger.info(`💬 Comment posted on #${issueNumber}`, { owner, repo, commentId: data.id });
-    return data;
+    })
+    logger.info(`💬 Comment posted on #${issueNumber}`, { owner, repo, commentId: data.id })
+    return data
   } catch (err) {
-    logger.error('Failed to create comment', { error: err.message, owner, repo, issueNumber });
-    throw err;
+    logger.error('Failed to create comment', { error: err.message, owner, repo, issueNumber })
+    throw err
   }
 }
 
@@ -47,13 +47,13 @@ async function createComment({ owner, repo, issueNumber, body }) {
  */
 async function ensureLabelExists({ owner, repo, name, color, description }) {
   try {
-    await octokit.issues.getLabel({ owner, repo, name });
+    await octokit.issues.getLabel({ owner, repo, name })
   } catch (err) {
     if (err.status === 404) {
-      logger.info(`Creating label "${name}" in ${owner}/${repo}`);
-      await octokit.issues.createLabel({ owner, repo, name, color, description });
+      logger.info(`Creating label "${name}" in ${owner}/${repo}`)
+      await octokit.issues.createLabel({ owner, repo, name, color, description })
     } else {
-      throw err;
+      throw err
     }
   }
 }
@@ -64,12 +64,16 @@ async function ensureLabelExists({ owner, repo, name, color, description }) {
  */
 async function addLabels({ owner, repo, issueNumber, labels }) {
   try {
-    const { data: existing } = await octokit.issues.listLabelsForRepo({ owner, repo, per_page: 100 });
-    const existingNames = new Set(existing.map((l) => l.name));
+    const { data: existing } = await octokit.issues.listLabelsForRepo({
+      owner,
+      repo,
+      per_page: 100,
+    })
+    const existingNames = new Set(existing.map(l => l.name))
 
     for (const label of labels) {
       if (!existingNames.has(label.name)) {
-        await ensureLabelExists({ owner, repo, ...label });
+        await ensureLabelExists({ owner, repo, ...label })
       }
     }
 
@@ -77,16 +81,17 @@ async function addLabels({ owner, repo, issueNumber, labels }) {
       owner,
       repo,
       issue_number: issueNumber,
-      labels      : labels.map((l) => l.name),
-    });
+      labels: labels.map(l => l.name),
+    })
 
     logger.info(`🏷️  Labels applied to #${issueNumber}`, {
-      owner, repo,
-      labels: labels.map((l) => l.name),
-    });
+      owner,
+      repo,
+      labels: labels.map(l => l.name),
+    })
   } catch (err) {
-    logger.error('Failed to add labels', { error: err.message, owner, repo, issueNumber });
-    throw err;
+    logger.error('Failed to add labels', { error: err.message, owner, repo, issueNumber })
+    throw err
   }
 }
 
@@ -96,8 +101,8 @@ async function addLabels({ owner, repo, issueNumber, labels }) {
  * Fetch a single issue.
  */
 async function getIssue({ owner, repo, issueNumber }) {
-  const { data } = await octokit.issues.get({ owner, repo, issue_number: issueNumber });
-  return data;
+  const { data } = await octokit.issues.get({ owner, repo, issue_number: issueNumber })
+  return data
 }
 
 // ── Pull Requests ─────────────────────────────────────────────────────────────
@@ -110,17 +115,17 @@ async function getPullRequestFiles({ owner, repo, pullNumber }) {
     owner,
     repo,
     pull_number: pullNumber,
-    per_page   : 100,
-  });
-  return data;
+    per_page: 100,
+  })
+  return data
 }
 
 /**
  * Fetch PR details.
  */
 async function getPullRequest({ owner, repo, pullNumber }) {
-  const { data } = await octokit.pulls.get({ owner, repo, pull_number: pullNumber });
-  return data;
+  const { data } = await octokit.pulls.get({ owner, repo, pull_number: pullNumber })
+  return data
 }
 
 module.exports = {
@@ -130,4 +135,4 @@ module.exports = {
   getIssue,
   getPullRequestFiles,
   getPullRequest,
-};
+}

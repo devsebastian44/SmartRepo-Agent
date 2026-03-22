@@ -4,15 +4,15 @@
  * All AI prompts are defined here – making it easy to swap providers.
  */
 
-const OpenAI = require('openai');
-const logger  = require('../utils/logger');
+const OpenAI = require('openai')
+const logger = require('../utils/logger')
 
 const openai = new OpenAI({
   apiKey: process.env.AI_API_KEY || process.env.OPENAI_API_KEY || process.env.GEMINI_API_KEY,
   baseURL: process.env.AI_BASE_URL || undefined, // undefined falls back to OpenAI default
-});
+})
 
-const MODEL = process.env.AI_MODEL || 'gpt-4o-mini';
+const MODEL = process.env.AI_MODEL || 'gpt-4o-mini'
 
 /**
  * Core helper – sends a chat completion request.
@@ -26,11 +26,11 @@ async function chat(systemPrompt, userContent) {
     temperature: 0.4,
     messages: [
       { role: 'system', content: systemPrompt },
-      { role: 'user', content: userContent }
-    ]
-  });
+      { role: 'user', content: userContent },
+    ],
+  })
 
-  return response.choices[0].message.content.trim();
+  return response.choices[0].message.content.trim()
 }
 
 // ── Issue Analysis ─────────────────────────────────────────────────────────────
@@ -45,7 +45,7 @@ async function analyzeIssueAndRespond({ title, body, classification }) {
 Your job is to help contributors by analysing GitHub issues and providing actionable, technically precise responses.
 Always respond in Markdown. Be concise but thorough. Use bullet points for lists.
 Never fabricate specific line numbers or file paths unless they appear in the issue body.
-End every response with "---\\n*🤖 This response was generated automatically by the GitHub AI Bot.*"`;
+End every response with "---\\n*🤖 This response was generated automatically by the GitHub AI Bot.*"`
 
   const userContent = `
 Issue Classification: ${classification}
@@ -62,15 +62,15 @@ Please:
 4. If this is a bug, include a debugging checklist.
 5. If a feature request, outline possible implementation approaches.
 6. If a question, answer it or point to the relevant documentation area.
-`.trim();
+`.trim()
 
-  logger.info('🧠 Requesting AI analysis for issue', { classification, title });
+  logger.info('🧠 Requesting AI analysis for issue', { classification, title })
 
   try {
-    return await chat(systemPrompt, userContent);
+    return await chat(systemPrompt, userContent)
   } catch (err) {
-    logger.error('AI issue analysis failed', { error: err.message });
-    return generateFallbackIssueResponse(classification);
+    logger.error('AI issue analysis failed', { error: err.message })
+    return generateFallbackIssueResponse(classification)
   }
 }
 
@@ -88,16 +88,18 @@ Be constructive, specific, and professional. Focus on:
 - Missing tests or documentation
 - Security concerns
 Respond in Markdown. Keep it concise – no more than 5 main points.
-End with "---\\n*🤖 Automated PR review by the GitHub AI Bot.*"`;
+End with "---\\n*🤖 Automated PR review by the GitHub AI Bot.*"`
 
   // Summarise files changed (avoid sending huge patches to the API)
   const fileSummary = files
     .slice(0, 15) // cap at 15 files
-    .map((f) => {
-      const patchPreview = f.patch ? f.patch.split('\n').slice(0, 20).join('\n') : '(binary or no diff)';
-      return `**${f.filename}** (+${f.additions}/-${f.deletions})\n\`\`\`diff\n${patchPreview}\n\`\`\``;
+    .map(f => {
+      const patchPreview = f.patch
+        ? f.patch.split('\n').slice(0, 20).join('\n')
+        : '(binary or no diff)'
+      return `**${f.filename}** (+${f.additions}/-${f.deletions})\n\`\`\`diff\n${patchPreview}\n\`\`\``
     })
-    .join('\n\n');
+    .join('\n\n')
 
   const userContent = `
 **PR Title:** ${title}
@@ -107,15 +109,15 @@ ${body || '_(No description provided)_'}
 
 **Files changed (${files.length} total):**
 ${fileSummary}
-`.trim();
+`.trim()
 
-  logger.info('🧠 Requesting AI review for PR', { title, fileCount: files.length });
+  logger.info('🧠 Requesting AI review for PR', { title, fileCount: files.length })
 
   try {
-    return await chat(systemPrompt, userContent);
+    return await chat(systemPrompt, userContent)
   } catch (err) {
-    logger.error('AI PR analysis failed', { error: err.message });
-    return generateFallbackPRResponse();
+    logger.error('AI PR analysis failed', { error: err.message })
+    return generateFallbackPRResponse()
   }
 }
 
@@ -154,9 +156,9 @@ A maintainer or our AI bot will review it shortly. In the meantime, please ensur
 
 ---
 *🤖 Fallback response – AI assistant temporarily unavailable.*`,
-  };
+  }
 
-  return responses[classification] || responses.default;
+  return responses[classification] || responses.default
 }
 
 function generateFallbackPRResponse() {
@@ -171,10 +173,10 @@ Thank you for your contribution! The AI reviewer is temporarily unavailable. A m
 - [ ] Code follows project style guidelines
 
 ---
-*🤖 Fallback response – AI assistant temporarily unavailable.*`;
+*🤖 Fallback response – AI assistant temporarily unavailable.*`
 }
 
 module.exports = {
   analyzeIssueAndRespond,
   analyzePullRequest,
-};
+}

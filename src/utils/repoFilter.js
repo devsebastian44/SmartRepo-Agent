@@ -6,22 +6,22 @@
  * Format: "owner/repo1,owner/repo2"
  */
 
-const logger = require('./logger');
+const logger = require('./logger')
 
 function isAllowedRepository(fullName) {
-  const allowed = process.env.ALLOWED_REPOSITORIES;
+  const allowed = process.env.ALLOWED_REPOSITORIES
 
   // If no filter configured, allow everything
-  if (!allowed || allowed.trim() === '') return true;
+  if (!allowed || allowed.trim() === '') return true
 
-  const list = allowed.split(',').map((r) => r.trim().toLowerCase());
-  const isAllowed = list.includes(fullName.toLowerCase());
+  const list = allowed.split(',').map(r => r.trim().toLowerCase())
+  const isAllowed = list.includes(fullName.toLowerCase())
 
   if (!isAllowed) {
-    logger.info(`Repository "${fullName}" is not in the allowlist – skipping event`);
+    logger.info(`Repository "${fullName}" is not in the allowlist – skipping event`)
   }
 
-  return isAllowed;
+  return isAllowed
 }
 
-module.exports = { isAllowedRepository };
+module.exports = { isAllowedRepository }
