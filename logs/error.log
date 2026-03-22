@@ -4,3 +4,4 @@
 {"level":"error","message":"GITHUB_WEBHOOK_SECRET is not set – cannot validate webhooks","service":"github-ai-bot","timestamp":"2026-03-21 22:55:18"}
 {"level":"error","message":"GITHUB_WEBHOOK_SECRET is not set – cannot validate webhooks","service":"github-ai-bot","timestamp":"2026-03-21 22:56:48"}
 {"level":"error","message":"GITHUB_WEBHOOK_SECRET is not set – cannot validate webhooks","service":"github-ai-bot","timestamp":"2026-03-21 23:00:00"}
+{"level":"error","message":"GITHUB_WEBHOOK_SECRET is not set – cannot validate webhooks","service":"github-ai-bot","timestamp":"2026-03-21 23:05:12"}
