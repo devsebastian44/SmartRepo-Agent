@@ -1,51 +1,51 @@
-# Changelog
+# Registro de Cambios
 
-All notable changes to this project will be documented in this file.
+Todos los cambios notables de este proyecto serán documentados en este archivo.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+El formato está basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/),
+y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.0.0] - 2024-03-22
 
-### Added
-- Initial GitHub AI automation bot functionality
-- Webhook handling for GitHub events
-- AI-powered issue classification
-- Automatic labeling and commenting
-- Security middleware with rate limiting
-- Comprehensive logging system
-- Docker support for containerized deployment
-- Modern development tooling (ESLint, Prettier, Husky)
-- Pre-commit hooks with lint-staged
-- Comprehensive test suite with Jest
-- Babel configuration for ES module compatibility
+### Agregado
+- Funcionalidad inicial del bot de automatización GitHub con IA
+- Manejo de webhooks para eventos de GitHub
+- Clasificación de issues con IA
+- Etiquetado y comentado automático
+- Middleware de seguridad con rate limiting
+- Sistema de logging completo
+- Soporte Docker para despliegue contenerizado
+- Herramientas de desarrollo modernas (ESLint, Prettier, Husky)
+- Hooks pre-commit con lint-staged
+- Suite de pruebas completa con Jest
+- Configuración Babel para compatibilidad con ES modules
 
-### Features
-- GitHub webhook integration
-- Issue classification using AI
-- Automatic issue labeling
-- Automatic issue commenting
-- Rate limiting protection
-- Health check endpoint
-- Environment variable validation
-- Repository filtering
-- Signature verification for webhooks
+### Características
+- Integración con webhooks de GitHub
+- Clasificación de issues usando IA
+- Etiquetado automático de issues
+- Comentado automático de issues
+- Protección contra rate limiting
+- Endpoint de health check
+- Validación de variables de entorno
+- Filtrado de repositorios
+- Verificación de firmas para webhooks
 
-### Security
-- Helmet.js for security headers
+### Seguridad
+- Helmet.js para headers de seguridad
 - Express rate limiting
-- GitHub webhook signature verification
-- Environment variable validation
+- Verificación de firmas de webhooks de GitHub
+- Validación de variables de entorno
 
-### Development
-- ESLint with Standard config
-- Prettier code formatting
-- Husky pre-commit hooks
-- Jest testing framework
-- Nodemon for development
-- Docker and Docker Compose support
+### Desarrollo
+- ESLint con configuración Standard
+- Formateo de código con Prettier
+- Hooks pre-commit de Husky
+- Framework de pruebas Jest
+- Nodemon para desarrollo
+- Soporte Docker y Docker Compose
 
-### Dependencies
-- Updated all dependencies to latest stable versions
-- Added modern development dependencies
-- Fixed ES module compatibility issues
+### Dependencias
+- Actualizadas todas las dependencias a últimas versiones estables
+- Agregadas dependencias de desarrollo modernas
+- Corregidos problemas de compatibilidad con ES modules

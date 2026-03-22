@@ -1,55 +1,55 @@
-# Contributing to GitHub AI Automation Bot
+# Guía de Contribución al Bot de Automatización GitHub con IA
 
-Thank you for your interest in contributing! This document provides guidelines for contributing to this project.
+¡Gracias por tu interés en contribuir! Este documento proporciona las pautas para contribuir a este proyecto.
 
-## Development Setup
+## Configuración de Desarrollo
 
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Copy `.env.example` to `.env` and configure your environment variables
-4. Start development server: `npm run dev`
+1. Clona el repositorio
+2. Instala las dependencias: `npm install`
+3. Copia `.env.example` a `.env` y configura tus variables de entorno
+4. Inicia el servidor de desarrollo: `npm run dev`
 
-## Code Style
+## Estilo de Código
 
-This project uses ESLint and Prettier for code formatting:
+Este proyecto utiliza ESLint y Prettier para el formateo de código:
 
-- Run `npm run lint` to check code style
-- Run `npm run lint:fix` to automatically fix linting issues
-- Run `npm run format` to format code with Prettier
+- Ejecuta `npm run lint` para verificar el estilo del código
+- Ejecuta `npm run lint:fix` para corregir automáticamente problemas de linting
+- Ejecuta `npm run format` para formatear el código con Prettier
 
-## Testing
+## Pruebas
 
-- Run tests: `npm test`
-- Run tests in watch mode: `npm run test:watch`
-- Run tests with coverage: `npm test` (coverage is generated automatically)
+- Ejecutar pruebas: `npm test`
+- Ejecutar pruebas en modo watch: `npm run test:watch`
+- Ejecutar pruebas con coverage: `npm test` (el coverage se genera automáticamente)
 
-## Pre-commit Hooks
+## Hooks Pre-commit
 
-This project uses Husky and lint-staged to ensure code quality:
+Este proyecto utiliza Husky y lint-staged para asegurar la calidad del código:
 
-- Code is automatically linted and formatted before each commit
-- Tests run automatically before pushing (if configured)
+- El código se lintea y formatea automáticamente antes de cada commit
+- Las pruebas se ejecutan automáticamente antes de hacer push (si está configurado)
 
-## Submitting Changes
+## Enviar Cambios
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m "feat: add amazing feature"`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
+1. Fork el repositorio
+2. Crea una rama de feature: `git checkout -b feature/amazing-feature`
+3. Confirma tus cambios: `git commit -m "feat: add amazing feature"`
+4. Push a la rama: `git push origin feature/amazing-feature`
+5. Abre un Pull Request
 
-## Commit Message Format
+## Formato de Mensajes de Commit
 
-This project follows [Conventional Commits](https://www.conventionalcommits.org/) specification:
+Este proyecto sigue la especificación [Conventional Commits](https://www.conventionalcommits.org/):
 
-- `feat:` for new features
-- `fix:` for bug fixes
-- `docs:` for documentation changes
-- `style:` for code style changes
-- `refactor:` for code refactoring
-- `test:` for test changes
-- `chore:` for maintenance tasks
+- `feat:` para nuevas características
+- `fix:` para correcciones de bugs
+- `docs:` para cambios en documentación
+- `style:` para cambios de estilo de código
+- `refactor:` para refactorización de código
+- `test:` para cambios en pruebas
+- `chore:` para tareas de mantenimiento
 
-## Security
+## Seguridad
 
-If you discover a security vulnerability, please report it privately before creating a public issue.
+Si descubres una vulnerabilidad de seguridad, por favor repórtala de forma privada antes de crear un issue público.
