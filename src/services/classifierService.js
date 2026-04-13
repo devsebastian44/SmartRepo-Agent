@@ -5,7 +5,7 @@
  * Uses a scoring approach: counts keyword hits per category.
  */
 
-const { CLASSIFICATION_KEYWORDS, LABELS } = require('../../config/labels')
+const { CLASSIFICATION_KEYWORDS, LABELS } = require('../../configs/labels')
 const logger = require('../utils/logger')
 
 /**

@@ -12,7 +12,7 @@
 
 const githubService = require('../services/githubService')
 const aiService = require('../services/aiService')
-const { LABELS } = require('../../config/labels')
+const { LABELS } = require('../../configs/labels')
 const logger = require('../utils/logger')
 
 /**
