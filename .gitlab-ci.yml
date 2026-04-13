@@ -15,7 +15,7 @@ before_script:
 test:
   stage: test
   script:
-    - npm test
+    - npm run test:ci
 
 lint:
   stage: lint

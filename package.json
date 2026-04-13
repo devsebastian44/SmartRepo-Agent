@@ -8,7 +8,7 @@
     "dev": "nodemon app.js",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "test:ci": "jest --ci --coverage --watchAll=false",
+    "test:ci": "jest --ci --coverage --watchAll=false --forceExit",
     "lint": "eslint src/ --ext .js",
     "lint:fix": "eslint src/ --ext .js --fix",
     "format": "prettier --write \"src/**/*.js\" \"configs/**/*.js\" \"*.js\"",

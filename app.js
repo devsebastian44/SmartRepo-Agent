@@ -71,14 +71,16 @@ app.use((err, _req, res, _next) => {
 })
 
 // ── Start server ──────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  logger.info(`🤖 GitHub AI Bot running on port ${PORT}`, {
-    env: process.env.NODE_ENV,
-    autoComment: process.env.AUTO_COMMENT_ON_ISSUE,
-    autoLabel: process.env.AUTO_LABEL,
+if (require.main === module) {
+  app.listen(PORT, () => {
+    logger.info(`🤖 GitHub AI Bot running on port ${PORT}`, {
+      env: process.env.NODE_ENV,
+      autoComment: process.env.AUTO_COMMENT_ON_ISSUE,
+      autoLabel: process.env.AUTO_LABEL,
+    })
+    console.log(`\n🚀 ¡Servidor listo! Haz clic en el enlace para abrir:`)
+    console.log(`➡️  http://localhost:${PORT}\n`)
   })
-  console.log(`\n🚀 ¡Servidor listo! Haz clic en el enlace para abrir:`)
-  console.log(`➡️  http://localhost:${PORT}\n`)
-})
+}
 
 module.exports = app // exported for testing
