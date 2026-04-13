@@ -287,7 +287,7 @@ server {
 
 ## 🎨 Personalizando las Etiquetas
 
-Puedes editar el archivo `config/labels.js` para definir tus propias etiquetas y palabras clave de clasificación:
+Puedes editar el archivo `configs/labels.js` para definir tus propias etiquetas y palabras clave de clasificación:
 
 ```js
 // Ejemplo: Añadir una etiqueta nueva

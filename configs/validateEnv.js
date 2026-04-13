@@ -1,5 +1,5 @@
 /**
- * config/validateEnv.js
+ * configs/validateEnv.js
  * Validates required environment variables at startup.
  * Fails fast with a clear error message instead of a cryptic runtime crash.
  */

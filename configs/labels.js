@@ -1,5 +1,5 @@
 /**
- * config/labels.js
+ * configs/labels.js
  * Central label configuration.
  * Modify this file to customize labels without touching business logic.
  */

@@ -1,4 +1,4 @@
-image: node:18-alpine
+image: node:20-alpine
 
 stages:
   - test
@@ -10,7 +10,7 @@ cache:
     - node_modules/
 
 before_script:
-  - npm ci --prefer-offline
+  - npm ci --prefer-offline --ignore-scripts
 
 test:
   stage: test
