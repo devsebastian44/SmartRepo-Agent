@@ -10,7 +10,7 @@ const helmet = require('helmet')
 const rateLimit = require('express-rate-limit')
 const logger = require('./src/utils/logger')
 const webhookRouter = require('./src/webhooks/webhookRouter')
-const { validateEnv } = require('./config/validateEnv')
+const { validateEnv } = require('./configs/validateEnv')
 
 // ── Validate required environment variables ───────────────────────────────────
 validateEnv()

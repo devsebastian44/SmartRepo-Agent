@@ -89,3 +89,9 @@ temp/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Backups and Security
+*.bak
+*.swp
+*.rsa
+*.pem

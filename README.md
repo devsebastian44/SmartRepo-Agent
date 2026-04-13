@@ -34,34 +34,40 @@
 ```
 github-ai-automation-bot/
 ├── app.js                          # Punto de entrada del servidor Express
-├── config/
-│   ├── labels.js                   # Definición de etiquetas y palabras clave
-│   └── validateEnv.js              # Validación de variables de entorno al iniciar
-├── src/
-│   ├── controllers/
-│   │   ├── issueController.js      # Maneja eventos issues.opened / issue_comment
-│   │   └── pullRequestController.js# Maneja eventos pull_request + chequeos estáticos
-│   ├── services/
-│   │   ├── githubService.js        # Wrapper de Octokit (comentarios, etiquetas, archivos)
-│   │   ├── aiService.js            # Integración con IA (análisis y revisión)
-│   │   └── classifierService.js   # Clasificador de issues basado en palabras clave
-│   ├── utils/
-│   │   ├── logger.js               # Logger de Winston
-│   │   ├── verifySignature.js      # Validación de firmas HMAC para Webhooks
-│   │   └── repoFilter.js           # Filtro de repositorios permitidos
-│   └── webhooks/
-│       └── webhookRouter.js        # Enrutador y despachador de eventos
-├── tests/
-│   ├── classifierService.test.js
-│   ├── verifySignature.test.js
-│   └── webhookRouter.test.js
-├── docs/
-│   ├── example-issue-payload.json
-│   └── example-pr-payload.json
+├── configs/                        # Configuraciones, validación y definición de etiquetas (Privado en GitLab)
+├── src/                            # Lógica principal del bot
+├── tests/                          # Tests automatizados con Jest (Privado en GitLab)
+├── docs/                           # Documentación del sistema
+├── diagrams/                       # Modelos visuales técnicos
+├── scripts/                        # Scripts DevSecOps (incluye publish_public.ps1) (Privado en GitLab)
+├── .gitlab-ci.yml                  # Configuración de integración continua
 ├── .env.example
 ├── .gitignore
 └── package.json
 ```
+
+---
+
+## 🔒 Arquitectura DevSecOps (GitLab ➔ GitHub)
+
+> **⚠️ AVISO IMPORTANTE: Esta rama en GitHub es una representación pública (Portafolio Sanitizado).**
+
+Este proyecto sigue una arquitectura **DevSecOps profesional**, separando rigurosamente el entorno de desarrollo y pruebas del portafolio público:
+
+* **GitLab (Laboratorio Privado)**: Actúa como la *Única Fuente de Verdad* (Source of Truth). Contiene el código completo, las suites de *testing* (TDD/BDD), configuraciones sensibles (`configs/`), pipelines de CI/CD (`.gitlab-ci.yml`), y la lógica de validación. Todo el desarrollo se trackea frente a `origin-gitlab/main`.
+* **GitHub (Portafolio Público)**: Solo incluye el código funcional básico, estructura limpia, documentación (`docs/`), diagramas y las pautas generales de uso.
+
+### 📜 Script `publish_public.ps1`
+
+El repositorio implementa una estrategia de publicación automatizada mediante `scripts/publish_public.ps1`.
+El flujo obligatorio garantiza que ningún cambio pase a GitHub sin ser primero validado en el pipeline y luego sanitizado:
+
+1. **Desarrollo en `main` (GitLab)**
+2. Validación en integración continua (*tests, linters y auditoría npm*)
+3. Ejecución de `publish_public.ps1` en PowerShell
+4. Creación dinámica de la rama `public`
+5. **Sanitización forzada**: Eliminación de `tests/`, `configs/`, `scripts/` y artefactos dependientes del pipeline privado.
+6. **Deploy**: Push forzado (`--force`) a `origin/main` (GitHub) de manera limpia y restringida.
 
 ---
 
