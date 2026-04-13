@@ -8,7 +8,7 @@
 
 const logger = require('./logger')
 
-function isAllowedRepository(fullName) {
+function isAllowedRepository (fullName) {
   const allowed = process.env.ALLOWED_REPOSITORIES
 
   // If no filter configured, allow everything
