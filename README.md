@@ -1,275 +1,318 @@
-# 🤖 Bot de Automatización para GitHub con IA
+# SmartRepo Agent
 
-<div align="center">
-
-![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)
-![Express](https://img.shields.io/badge/Express-4.x-000000?logo=express)
-![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?logo=openai)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![Tests](https://img.shields.io/badge/tests-Jest-C21325?logo=jest)
-
-**Un bot inteligente para GitHub que etiqueta y clasifica issues automáticamente y revisa pull requests usando Inteligencia Artificial.**
-
-</div>
+![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=flat&logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4.x-000000?style=flat&logo=express&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?style=flat&logo=openai&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)
+![Jest](https://img.shields.io/badge/Testing-Jest-C21325?style=flat&logo=jest&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-brightgreen?style=flat)
 
 ---
 
-## ✨ Características
+## 🧠 Overview
 
-| Característica | Descripción |
-|---------|-------------|
-| 🔐 **Webhooks Seguros** | Valida cada petición mediante firmas HMAC-SHA256 |
-| 🏷️ **Auto-etiquetado** | Clasifica los issues como `bug`, `enhancement` (mejora), `question` (pregunta), `security` (seguridad), etc. |
-| 🧠 **Análisis con IA** | Genera respuestas técnicas y análisis de causa raíz utilizando OpenAI o modelos compatibles |
-| 🔍 **Revisión de PR** | Detecta malas prácticas, diffs muy grandes, falta de pruebas y descripciones ambiguas |
-| 📊 **Logs Estructurados** | Sistema de logs basado en Winston con rotación de archivos |
-| 🛡️ **Límite de Peticiones** | Protege contra el abuso masivo de webhooks (Rate Limiting) |
-| 🔀 **Soporte Multi-repositorio** | Lista de permitidos configurable para funcionar en múltiples repositorios |
-| 🔄 **Respuestas de Respaldo** | Degradación elegante en caso de que la API de la IA no esté disponible |
+**SmartRepo Agent** es un bot de automatización inteligente para GitHub construido sobre **Node.js 18+ y Express**, que escucha eventos de webhooks en tiempo real para realizar dos funciones principales de forma completamente autónoma: **clasificar y etiquetar issues** mediante análisis de palabras clave y una capa de IA (OpenAI o modelos compatibles como Groq, Gemini u OpenRouter), y **revisar Pull Requests** detectando malas prácticas, diffs excesivos, ausencia de tests y descripciones ambiguas.
+
+A partir del análisis de la estructura del repositorio (`app.js`, `src/`, `configs/`, `.env.example`, `babel.config.js`, `nodemon.json`, `.eslintrc.json`, `prettier.config.js`, `docker-compose.yml`, `.nvmrc`) y de los archivos de configuración detectados, el sistema opera como un servidor web Express que expone un endpoint de webhooks (`POST /webhooks/github`) con verificación criptográfica de firmas HMAC-SHA256 sobre cada petición entrante, un endpoint de salud (`GET /health`), logging estructurado con Winston, rate limiting por defecto y soporte para múltiples repositorios mediante lista de permitidos configurable.
+
+El proyecto sigue una arquitectura **DevSecOps** con separación entre el laboratorio técnico completo en GitLab (con tests, configuraciones y pipeline CI/CD privados) y el portafolio público sanitizado en GitHub, orquestada mediante el script `scripts/publish_public.ps1`.
 
 ---
 
-## 🏗️ Estructura del Proyecto
+## ⚙️ Features
 
-```
-github-ai-automation-bot/
-├── app.js                          # Punto de entrada del servidor Express
-├── configs/                        # Configuraciones, validación y definición de etiquetas (Privado en GitLab)
-├── src/                            # Lógica principal del bot
-├── tests/                          # Tests automatizados con Jest (Privado en GitLab)
-├── docs/                           # Documentación del sistema
-├── diagrams/                       # Modelos visuales técnicos
-├── scripts/                        # Scripts DevSecOps (incluye publish_public.ps1) (Privado en GitLab)
-├── .gitlab-ci.yml                  # Configuración de integración continua
-├── .env.example
-├── .gitignore
-└── package.json
-```
+- **Webhook server seguro con verificación HMAC-SHA256** — Valida cada petición entrante de GitHub usando `crypto.timingSafeEqual` para prevenir ataques de temporización, rechazando inmediatamente cualquier evento con firma inválida.
+- **Auto-etiquetado de issues basado en IA** — Clasifica automáticamente los issues abiertos en categorías (`bug`, `enhancement`, `question`, `security`, etc.) mediante análisis de palabras clave sobre título y descripción, aplicando las etiquetas vía GitHub REST API.
+- **Análisis de issues con IA generativa** — Envía el contenido del issue al modelo de IA configurado (GPT-4o-mini por defecto) y publica automáticamente un comentario técnico con análisis de causa raíz o respuesta contextual directamente en el issue.
+- **Revisión automática de Pull Requests** — Analiza los archivos modificados en cada PR, ejecuta chequeos estáticos (diffs muy grandes, ausencia de tests, descripciones ambiguas) y usa IA para revisar el diff completo, publicando un comentario de revisión detallado.
+- **Rate limiting integrado** — Protege el servidor contra abuso masivo de webhooks limitando las peticiones entrantes (30 por minuto por defecto), retornando `429 Too Many Requests` cuando se supera el umbral.
+- **Soporte multi-repositorio con allowlist** — La variable `ALLOWED_REPOSITORIES` permite configurar en qué repositorios opera el bot, ignorando silenciosamente los eventos de repositorios no autorizados.
+- **Degradación elegante** — En caso de que la API de IA no esté disponible o retorne error, el sistema publica respuestas de fallback predefinidas sin interrumpir el flujo de procesamiento.
+- **Prevención de bucles infinitos** — El bot detecta automáticamente si el evento proviene de una cuenta de tipo Bot y lo ignora, evitando que se responda a sí mismo indefinidamente.
+- **Logging estructurado con Winston** — Sistema de logs con niveles (info, warn, error), formato legible en consola y rotación automática de archivos de log en producción.
+- **Hot-reload en desarrollo** — `nodemon.json` configura el reinicio automático del servidor ante cambios en el código fuente durante el desarrollo.
+- **Contenerización Docker** — `Dockerfile` y `docker-compose.yml` permiten levantar el bot en un entorno aislado y reproducible con un único comando.
+- **Labels personalizables** — `configs/labels.js` expone la definición de etiquetas y palabras clave de clasificación como configuración editable sin modificar el core del sistema.
 
 ---
 
-## 🔒 Arquitectura DevSecOps (GitLab ➔ GitHub)
+## 🛠️ Tech Stack
 
-> **⚠️ AVISO IMPORTANTE: Esta rama en GitHub es una representación pública (Portafolio Sanitizado).**
-
-Este proyecto sigue una arquitectura **DevSecOps profesional**, separando rigurosamente el entorno de desarrollo y pruebas del portafolio público:
-
-* **GitLab (Laboratorio Privado)**: Actúa como la *Única Fuente de Verdad* (Source of Truth). Contiene el código completo, las suites de *testing* (TDD/BDD), configuraciones sensibles (`configs/`), pipelines de CI/CD (`.gitlab-ci.yml`), y la lógica de validación. Todo el desarrollo se trackea frente a `origin-gitlab/main`.
-* **GitHub (Portafolio Público)**: Solo incluye el código funcional básico, estructura limpia, documentación (`docs/`), diagramas y las pautas generales de uso.
-
-### 📜 Script `publish_public.ps1`
-
-El repositorio implementa una estrategia de publicación automatizada mediante `scripts/publish_public.ps1`.
-El flujo obligatorio garantiza que ningún cambio pase a GitHub sin ser primero validado en el pipeline y luego sanitizado:
-
-1. **Desarrollo en `main` (GitLab)**
-2. Validación en integración continua (*tests, linters y auditoría npm*)
-3. Ejecución de `publish_public.ps1` en PowerShell
-4. Creación dinámica de la rama `public`
-5. **Sanitización forzada**: Eliminación de `tests/`, `configs/`, `scripts/` y artefactos dependientes del pipeline privado.
-6. **Deploy**: Push forzado (`--force`) a `origin/main` (GitHub) de manera limpia y restringida.
-
----
-
-## 🚀 Inicio Rápido
-
-### Requisitos Previos
-
-- Node.js >= 18
-- Una cuenta y un repositorio en GitHub
-- Una API Key de OpenAI (o de un proveedor compatible como Groq, Gemini, OpenRouter)
-- Alguna forma de exponer tu servidor local (por ejemplo, [ngrok](https://ngrok.com))
+| Componente | Tecnología |
+|---|---|
+| Lenguaje principal | JavaScript (Node.js 18+) |
+| Framework web | Express 4.x |
+| IA / LLM | OpenAI API (GPT-4o-mini) / Groq / Gemini / OpenRouter |
+| Verificación segura | `crypto.timingSafeEqual` (HMAC-SHA256) |
+| Logging | Winston (structured + file rotation) |
+| Testing | Jest (TDD/BDD) |
+| Transpilación | Babel |
+| Linting | ESLint |
+| Formateo | Prettier |
+| Dev server | Nodemon |
+| Contenerización | Docker + docker-compose |
+| Gestión de versiones Node | nvm (`.nvmrc`) |
+| Pipeline CI/CD | GitLab CI (`.gitlab-ci.yml`) |
+| Pipeline sanitización | PowerShell (`publish_public.ps1`) |
+| Proceso en producción | PM2 |
+| Proxy inverso (producción) | NGINX |
 
 ---
 
-### 1. Clonar e Instalar
+## 📦 Installation
+
+### Requisitos previos
+
+- Node.js 18 o superior (`nvm use` para usar la versión del `.nvmrc`)
+- npm
+- Una cuenta GitHub con acceso a configurar webhooks en el repositorio objetivo
+- API Key de OpenAI o de un proveedor compatible (Groq, Gemini, OpenRouter)
+- Herramienta para exponer el servidor local (ngrok) durante el desarrollo
+
+### Instalación local (desarrollo)
 
 ```bash
-git clone https://github.com/TU_USUARIO/github-ai-automation-bot.git
-cd github-ai-automation-bot
+# 1. Clonar el repositorio
+git clone https://github.com/devsebastian44/SmartRepo-Agent.git
+cd SmartRepo-Agent
+
+# 2. (Opcional) Usar la versión exacta de Node especificada en .nvmrc
+nvm use
+
+# 3. Instalar dependencias
 npm install
+
+# 4. Configurar variables de entorno
+cp .env.example .env
+# Editar .env con tus credenciales (ver sección de configuración)
+```
+
+### Instalación con Docker
+
+```bash
+# Levantar el servicio completo con docker-compose
+docker-compose up --build
+
+# O en segundo plano
+docker-compose up -d --build
+
+# Ver logs del contenedor
+docker-compose logs -f
 ```
 
 ---
 
-### 2. Configurar Variables de Entorno
+## ▶️ Usage
+
+### 1. Configurar variables de entorno
+
+Edita el archivo `.env` con tus credenciales:
 
 ```bash
-cp .env.example .env
-```
-
-Edita el archivo `.env` e ingresa tus credenciales:
-
-```env
-# Token de acceso personal de GitHub
-# Permisos obligatorios: repo → issues (lectura/escritura), pull requests (lectura/escritura)
+# Token de GitHub con permisos sobre issues y pull requests
 GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
 
-# El secreto que introducirás al crear el webhook en GitHub
+# Secreto para verificar firmas de webhooks (genera uno aleatorio y robusto)
 GITHUB_WEBHOOK_SECRET=elige_un_secreto_fuerte_y_aleatorio
 
-# API Key de la Inteligencia Artificial (OpenAI, Gemini, Groq, etc.)
+# API Key del proveedor de IA
 AI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxx
+
+# URL base del proveedor (vacío para OpenAI; ajusta para Groq, Gemini, etc.)
 AI_BASE_URL=
+
+# Modelo a utilizar
 AI_MODEL=gpt-4o-mini
 
-# (Opcional) restringir a repositorios específicos: "propietario/repo1,propietario/repo2"
+# (Opcional) Restricción de repositorios: "propietario/repo1,propietario/repo2"
 ALLOWED_REPOSITORIES=
 ```
 
----
-
-### 3. Ejecutar Localmente
+### 2. Iniciar el servidor
 
 ```bash
-# Desarrollo (se reinicia automáticamente ante cambios)
+# Modo desarrollo (hot-reload con nodemon)
 npm run dev
 
-# Producción
+# Modo producción
 npm start
-```
 
-El servidor iniciará en `http://localhost:3000`.
-
-Verifica que está corriendo correctamente:
-```bash
+# Verificar que el servidor está activo
 curl http://localhost:3000/health
-# → {"status":"ok","service":"github-ai-automation-bot",...}
+# → { "status": "ok", "service": "smartrepo-agent", "version": "1.0.0" }
 ```
 
----
-
-### 4. Exponer con ngrok (para pruebas locales)
+### 3. Exponer el servidor con ngrok (desarrollo local)
 
 ```bash
 # Instalar ngrok: https://ngrok.com/download
 ngrok http 3000
+
+# Copiar la URL HTTPS generada, por ejemplo:
+# https://abc123.ngrok-free.app
+
+# El endpoint del webhook será:
+# https://abc123.ngrok-free.app/webhooks/github
 ```
 
-Copia la URL HTTPS, por ejemplo:
-```
-https://abc123.ngrok-free.app
-```
+### 4. Configurar el webhook en GitHub
 
-La URL o Endpoint de tu Webhook será:
-```
-https://abc123.ngrok-free.app/webhooks/github
-```
-
----
-
-### 5. Conectar a un Repositorio en GitHub
-
-1. Ve a tu repositorio en GitHub
-2. Navega a **Settings (Configuración) → Webhooks → Add webhook**
-3. Rellena el formulario:
+En tu repositorio de GitHub:
+`Settings → Webhooks → Add webhook`
 
 | Campo | Valor |
-|-------|-------|
+|---|---|
 | **Payload URL** | `https://TU-DOMINIO/webhooks/github` |
 | **Content type** | `application/json` |
-| **Secret** | El mismo valor de `GITHUB_WEBHOOK_SECRET` que tienes en tu `.env` |
-| **Events** | Selecciona: `Issues`, `Issue comments`, `Pull requests` |
+| **Secret** | Valor de `GITHUB_WEBHOOK_SECRET` en `.env` |
+| **Events** | `Issues`, `Issue comments`, `Pull requests` |
 
-4. Haz clic en **Add webhook**
-5. GitHub enviará un evento `ping` — revisa los logs en tu consola para ver:
-   ```
-   🏓 Ping received from GitHub – webhook configured successfully!
-   ```
+Al guardar, GitHub enviará un evento `ping`. Verifica en los logs del servidor:
+```
+🏓 Ping received from GitHub — webhook configured successfully!
+```
 
----
-
-## 🧪 Ejecutar Pruebas
+### 5. Ejecutar tests
 
 ```bash
-# Ejecutar todas las pruebas
+# Ejecutar suite completa de Jest
 npm test
 
-# Modo de observación (watch mode)
+# Modo observación (watch mode)
 npm run test:watch
 
-# Ver reporte de cobertura
+# Reporte de cobertura
 npm test -- --coverage
 ```
 
+### Flujo de eventos procesados
+
+```
+═══════════════════════════════════════════════════════
+  ISSUE ABIERTO
+═══════════════════════════════════════════════════════
+GitHub → POST /webhooks/github
+  ├── verifySignature()         → rechaza si firma HMAC inválida
+  ├── isAllowedRepository()     → ignora si no está en allowlist
+  ├── classifyIssue()           → análisis de palabras clave
+  │     └── bug / enhancement / question / security / ...
+  ├── addLabels()               → aplica etiquetas vía GitHub API
+  ├── analyzeIssueWithAI()      → envía título+body al modelo LLM
+  └── createComment()           → publica respuesta técnica en el issue
+
+═══════════════════════════════════════════════════════
+  PULL REQUEST ABIERTO
+═══════════════════════════════════════════════════════
+GitHub → POST /webhooks/github
+  ├── verifySignature()
+  ├── isAllowedRepository()
+  ├── getPullRequestFiles()     → obtiene archivos y diff del PR
+  ├── runStaticChecks()         → chequeos sin costo de IA:
+  │     ├── diff demasiado grande (> umbral configurado)
+  │     ├── ausencia de tests
+  │     └── descripción vacía o ambigua
+  ├── addLabels()
+  ├── analyzePRWithAI()         → el LLM revisa el diff completo
+  └── createComment()           → publica revisión detallada en el PR
+```
+
 ---
 
-## 🔄 Flujo de Eventos
-
-### Al abrir un Issue (Issue Opened)
+## 📁 Project Structure
 
 ```
-GitHub → POST /webhooks/github
-  └── verifySignature()           ← rechaza si es inválido
-  └── isAllowedRepository()       ← salta si no está en la lista permitida
-  └── classifyIssue()             ← puntuación de palabras clave (bug / mejora / pregunta / ...)
-  └── addLabels()                 ← aplica la etiqueta mediante la API de GitHub
-  └── analyzeIssueAndRespond()    ← La IA genera una respuesta técnica
-  └── createComment()             ← se publica el comentario en el issue
+SmartRepo-Agent/
+│
+├── app.js                         # Entry point del servidor Express:
+│                                  # inicializa middlewares, rate limiter,
+│                                  # registro de rutas y arranque en puerto 3000
+│
+├── src/                           # Lógica principal del bot:
+│                                  # handlers de webhooks, clasificador de issues,
+│                                  # cliente de IA, revisor de PRs,
+│                                  # cliente GitHub API e integración Winston
+│
+├── docs/                          # Documentación técnica del sistema:
+│                                  # guías de configuración, referencia de API
+│                                  # y documentación de arquitectura
+│
+├── diagrams/                      # Modelos visuales técnicos:
+│                                  # flujo de eventos, arquitectura de componentes
+│                                  # y diagramas de secuencia
+│
+├── Dockerfile                     # Imagen Docker del bot:
+│                                  # base node:18-alpine, instalación de deps,
+│                                  # configuración de usuario no-root
+│
+├── docker-compose.yml             # Orquestación de servicios:
+│                                  # bot + variables de entorno
+│
+├── .env.example                   # Plantilla de variables de entorno:
+│                                  # GITHUB_TOKEN, WEBHOOK_SECRET, AI_API_KEY,
+│                                  # AI_MODEL, ALLOWED_REPOSITORIES
+│
+├── babel.config.js                # Configuración de Babel:
+│                                  # transpilación ES modules → CommonJS
+│                                  # (compatibilidad Jest)
+│
+├── nodemon.json                   # Configuración de hot-reload:
+│                                  # extensiones vigiladas y archivos ignorados
+│
+├── .eslintrc.json                 # Reglas de linting ESLint
+├── prettier.config.js             # Reglas de formateo Prettier
+├── .editorconfig                  # Consistencia entre editores
+├── .nvmrc                         # Versión exacta de Node.js (18+)
+├── .dockerignore                  # Exclusiones de imagen Docker
+├── .gitignore                     # Exclusiones de Git
+├── CHANGELOG.md                   # Historial de cambios por versión
+├── CONTRIBUTING.md                # Guía de contribución al proyecto
+├── LICENSE                        # Licencia MIT
+├── package.json                   # Dependencias y scripts npm
+└── package-lock.json              # Lockfile de dependencias
 ```
 
-### Al abrir un Pull Request (Pull Request Opened)
-
-```
-GitHub → POST /webhooks/github
-  └── verifySignature()
-  └── getPullRequestFiles()       ← obtiene los archivos cambiados
-  └── runStaticChecks()           ← análisis rápidos y estáticos (sin costo de IA)
-  └── addLabels()
-  └── analyzePullRequest()        ← La IA revisa los cambios de código (diff)
-  └── createComment()             ← se publica el comentario de revisión
-```
+> 📌 La versión completa en GitLab incluye adicionalmente: `configs/` (definición de etiquetas `labels.js` y validación), `tests/` (suite Jest completa, TDD/BDD), `scripts/publish_public.ps1` (pipeline de sanitización) y `.gitlab-ci.yml` (CI/CD con tests, linting y auditoría npm).
 
 ---
 
-## 🌐 Desplegar en Producción
+## 🚀 Deployment
 
-### Opción A – Railway (Recomendado, tiene capa gratuita)
+### Opción A — Railway (recomendado, capa gratuita disponible)
 
 ```bash
-# Instalar Railway CLI
 npm install -g @railway/cli
-
 railway login
 railway init
 railway up
 ```
+Configura las variables de entorno en el panel de Railway → pestaña **Variables**.
 
-Configura tus variables de entorno en el panel de Railway bajo la pestaña **Variables**.
+### Opción B — Render
 
-### Opción B – Render
+1. Conecta el repositorio en [render.com](https://render.com) → **New Web Service**
+2. Build command: `npm install` | Start command: `npm start`
+3. Añade las variables de entorno en el panel de Render.
 
-1. Conecta tu repositorio de GitHub a [render.com](https://render.com)
-2. Crea un **Web Service** con lo siguiente:
-   - **Build command:** `npm install`
-   - **Start command:** `npm start`
-3. Añade tus variables de entorno en el panel de control de Render.
-
-### Opción C – VPS (Ubuntu/Debian)
+### Opción C — VPS Ubuntu/Debian con PM2 + NGINX
 
 ```bash
-# Instalar Node.js 20
+# Instalar Node.js 20 LTS
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
-# Instalar gestor de procesos PM2
+# Instalar PM2 (gestor de procesos en producción)
 npm install -g pm2
 
-# Clonar y configurar
-git clone https://github.com/TU_USUARIO/github-ai-automation-bot.git
-cd github-ai-automation-bot
-npm install
-cp .env.example .env
-nano .env  # rellena con tus valores
+# Clonar, configurar y arrancar
+git clone https://github.com/devsebastian44/SmartRepo-Agent.git
+cd SmartRepo-Agent && npm install
+cp .env.example .env && nano .env
 
-# Iniciar usando PM2
-pm2 start app.js --name "github-ai-bot"
-pm2 startup
-pm2 save
+pm2 start app.js --name "smartrepo-agent"
+pm2 startup && pm2 save
 ```
 
-Apunta tu dominio a la IP del servidor y utiliza NGINX como proxy inverso:
-
+Configurar NGINX como proxy inverso:
 ```nginx
 server {
     listen 80;
@@ -279,77 +322,126 @@ server {
         proxy_pass http://localhost:3000;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 }
 ```
 
 ---
 
-## 🎨 Personalizando las Etiquetas
+## 🔐 Security
 
-Puedes editar el archivo `configs/labels.js` para definir tus propias etiquetas y palabras clave de clasificación:
+El sistema está diseñado con **seguridad por defecto** en cada capa del stack:
 
-```js
-// Ejemplo: Añadir una etiqueta nueva
-LABELS.NEEDS_TRIAGE = {
-  name       : 'needs-triage',
-  color      : 'f9ca24',
-  description: 'Necesita ser revisado por un mantenedor',
-};
+### Verificación criptográfica de webhooks
 
-// Añadir palabras clave que detonen la clasificación de bug
-CLASSIFICATION_KEYWORDS.bug.push('regression', 'broke', 'invalid');
+Cada petición entrante es verificada mediante HMAC-SHA256 antes de ser procesada. La comparación se realiza con `crypto.timingSafeEqual` para eliminar la vulnerabilidad de timing attacks:
+
+```javascript
+// Comparación en tiempo constante — previene timing attacks
+const isValid = crypto.timingSafeEqual(
+  Buffer.from(expectedSignature),
+  Buffer.from(receivedSignature)
+);
+if (!isValid) return res.status(401).send('Unauthorized');
+```
+
+### Protección contra bucles infinitos
+
+El bot inspecciona el campo `sender.type` de cada evento de GitHub. Si el emisor es una cuenta de tipo `Bot`, el evento es descartado silenciosamente, eliminando el riesgo de que el sistema se responda a sí mismo en cadena.
+
+### Gestión segura de credenciales
+
+Todas las credenciales (tokens GitHub, API keys de IA, webhook secrets) se gestionan exclusivamente mediante variables de entorno. El `.gitignore` excluye el archivo `.env` y el `.env.example` contiene únicamente placeholders sin valores reales.
+
+### Rate Limiting
+
+El middleware de rate limiting bloquea peticiones excesivas al endpoint de webhooks, protegiendo el servidor contra ataques de abuso o bucles de eventos no controlados del lado de GitHub:
+
+```
+Límite por defecto: 30 peticiones / minuto / IP
+Respuesta al superar límite: 429 Too Many Requests
+```
+
+### Allowlist de repositorios
+
+La variable `ALLOWED_REPOSITORIES` restringe en qué repositorios actúa el bot. Los eventos de repositorios no listados son ignorados sin respuesta, reduciendo la superficie de acción del sistema.
+
+### Auditoría de dependencias
+
+El pipeline CI/CD en GitLab ejecuta `npm audit` en cada push, detectando vulnerabilidades conocidas en el árbol de dependencias antes de cualquier publicación.
+
+---
+
+## 🌐 Repository Architecture
+
+Este proyecto sigue una arquitectura distribuida con separación estricta de entornos:
+
+- **GitHub** — Portafolio técnico público: código fuente principal, documentación, diagramas de arquitectura y guías de configuración, en versión sanitizada
+- **GitLab** — Laboratorio técnico completo: suite de tests Jest, configuraciones de etiquetas, pipeline CI/CD privado y scripts de automatización DevSecOps
+
+### Pipeline DevSecOps (GitLab → GitHub)
+
+```
+[GitLab — Source of Truth]
+         │
+         ▼
+  [Pipeline CI/CD — .gitlab-ci.yml]
+    · npm install + npm audit    (auditoría de dependencias)
+    · ESLint + Prettier check    (calidad de código)
+    · Jest --coverage            (suite de tests + cobertura)
+         │
+         ▼
+  [scripts/publish_public.ps1 — Sanitización]
+    · Elimina tests/ (suite Jest privada)
+    · Elimina configs/ (labels.js y validadores)
+    · Elimina scripts/ (automatizaciones internas)
+    · Filtra .gitlab-ci.yml del pipeline privado
+    · Genera rama huérfana `public` limpia
+    · Push forzado controlado → GitHub main
+         │
+         ▼
+[GitHub — Versión Pública Sanitizada]
+```
+
+### 🔗 Full Source Code
+
+👉 Código completo disponible en GitLab: [https://gitlab.com/group-data-ia-lab/SmartRepo-Agent](https://gitlab.com/group-data-ia-lab/SmartRepo-Agent)
+
+---
+
+## 🚀 Roadmap
+
+Posibles extensiones identificadas desde la arquitectura y las capacidades del sistema actual:
+
+- [ ] **Soporte Slack / Discord** — Publicar notificaciones de decisiones del bot en canales de comunicación del equipo cuando se apliquen etiquetas o se haga una revisión de PR.
+- [ ] **Clasificación semántica con embeddings** — Reemplazar la clasificación por palabras clave con embeddings vectoriales del modelo de IA para lograr mayor precisión en la categorización de issues.
+- [ ] **Detector de duplicados de issues** — Usar similitud de embeddings para detectar y señalar issues potencialmente duplicados antes de aplicar etiquetas.
+- [ ] **Soporte para GitLab webhooks** — Extender el sistema para procesar Merge Requests e issues de GitLab además de GitHub, con un adaptador de eventos unificado.
+- [ ] **Panel de métricas** — Endpoint `/metrics` (Prometheus-compatible) para exponer estadísticas del bot: issues procesados, tasa de clasificación, tiempos de respuesta de IA y errores.
+- [ ] **Modo dry-run** — Variable `DRY_RUN=true` que procese los eventos y loguee las acciones que tomaría sin aplicar etiquetas ni publicar comentarios reales.
+- [ ] **Configuración por repositorio** — Soporte para un archivo `.smartrepo.yml` en el repositorio objetivo que defina reglas, etiquetas y umbrales personalizados por proyecto.
+- [ ] **Caché de respuestas IA** — Implementar caché con TTL sobre respuestas del LLM para issues con contenido muy similar, reduciendo costos de API.
+
+---
+
+## 📄 License
+
+Este proyecto está bajo la licencia **MIT**.
+
+```
+MIT License — Copyright (c) Sebastian Zhunaula (devsebastian44)
+Se permite el uso, copia, modificación y distribución con o sin
+fines comerciales, conservando el aviso de copyright original.
 ```
 
 ---
 
-## 📋 Referencia de la API
+## 👨‍💻 Author
 
-### `GET /health`
+**Sebastian Zhunaula**
+[GitHub: @devsebastian44](https://github.com/devsebastian44)
 
-Retorna el estado del servidor.
-
-```json
-{
-  "status": "ok",
-  "service": "github-ai-automation-bot",
-  "timestamp": "2024-02-01T12:00:00.000Z",
-  "version": "1.0.0"
-}
-```
-
-### `POST /webhooks/github`
-
-Recibe y procesa los eventos de GitHub. Requiere que la cabecera `X-Hub-Signature-256` sea válida.
-
----
-
-## 🔒 Consideraciones de Seguridad
-
-- **Validación de firmas:** Se verifica en cada petición entrante usando `crypto.timingSafeEqual` para prevenir ataques de sincronización temporal.
-- **Tokens:** Se guardan única y exclusivamente en variables de entorno — jamás deben ser expuestos en el código fuente.
-- **Límite de peticiones:** Protege contra abuso limitando las llamadas (por defecto 30 por minuto).
-- **Prevención de bucle infinito:** El bot ignora cualquier comentario realizado por una cuenta del tipo `Bot` (para evitar responderse a sí mismo).
-- **Lista de permitidos:** Restringe opcionalmente a qué repositorios debe responder tu bot.
-
----
-
-## 🤝 Contribuir
-
-1. Haz un Fork del repositorio
-2. Crea una rama para tu característica: `git checkout -b feat/mi-nueva-funcion`
-3. Haz tus modificaciones y añade pruebas (`tests/`)
-4. Corre el comando `npm test` para asegurarte de que todo funciona
-5. Abre y envía un Pull Request
-
----
-
-## 📄 Licencia
-
-MIT © 2024
-
----
-
-<div align="center">
-  Construido con ❤️ usando Node.js, Express e Inteligencia Artificial
-</div>
+> Bot desarrollado como laboratorio de automatización inteligente de repositorios,
+> combinando integración con la GitHub REST API, webhooks seguros con HMAC-SHA256
+> e IA generativa para clasificación autónoma de issues y revisión de Pull Requests.
