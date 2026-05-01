@@ -9,7 +9,7 @@ const logger = require('../utils/logger')
 
 const openai = new OpenAI({
   apiKey: process.env.AI_API_KEY || process.env.OPENAI_API_KEY || process.env.GEMINI_API_KEY,
-  baseURL: process.env.AI_BASE_URL || undefined, // undefined falls back to OpenAI default
+  baseURL: process.env.AI_BASE_URL || undefined // undefined falls back to OpenAI default
 })
 
 const MODEL = process.env.AI_MODEL || 'gpt-4o-mini'
@@ -20,14 +20,14 @@ const MODEL = process.env.AI_MODEL || 'gpt-4o-mini'
  * @param {string} userContent
  * @returns {Promise<string>}
  */
-async function chat(systemPrompt, userContent) {
+async function chat (systemPrompt, userContent) {
   const response = await openai.chat.completions.create({
     model: MODEL,
     temperature: 0.4,
     messages: [
       { role: 'system', content: systemPrompt },
-      { role: 'user', content: userContent },
-    ],
+      { role: 'user', content: userContent }
+    ]
   })
 
   return response.choices[0].message.content.trim()
@@ -40,7 +40,7 @@ async function chat(systemPrompt, userContent) {
  * @param {{ title: string, body: string, classification: string }} issue
  * @returns {Promise<string>} Markdown-formatted response
  */
-async function analyzeIssueAndRespond({ title, body, classification }) {
+async function analyzeIssueAndRespond ({ title, body, classification }) {
   const systemPrompt = `You are a senior software engineer acting as an automated GitHub bot.
 Your job is to help contributors by analysing GitHub issues and providing actionable, technically precise responses.
 Always respond in Markdown. Be concise but thorough. Use bullet points for lists.
@@ -79,7 +79,7 @@ Please:
  * @param {{ title: string, body: string, files: Array<{ filename: string, additions: number, deletions: number, patch: string }> }} pr
  * @returns {Promise<string>}
  */
-async function analyzePullRequest({ title, body, files }) {
+async function analyzePullRequest ({ title, body, files }) {
   const systemPrompt = `You are a senior software engineer performing an automated code review on GitHub.
 Be constructive, specific, and professional. Focus on:
 - Code quality and readability
@@ -123,7 +123,7 @@ ${fileSummary}
 
 // ── Fallbacks (when API is unavailable) ───────────────────────────────────────
 
-function generateFallbackIssueResponse(classification) {
+function generateFallbackIssueResponse (classification) {
   const responses = {
     bug: `## 🐛 Bug Report Received
 
@@ -155,13 +155,13 @@ A maintainer or our AI bot will review it shortly. In the meantime, please ensur
 - Checked the existing issues for duplicates.
 
 ---
-*🤖 Fallback response – AI assistant temporarily unavailable.*`,
+*🤖 Fallback response – AI assistant temporarily unavailable.*`
   }
 
   return responses[classification] || responses.default
 }
 
-function generateFallbackPRResponse() {
+function generateFallbackPRResponse () {
   return `## 👀 Pull Request Under Review
 
 Thank you for your contribution! The AI reviewer is temporarily unavailable. A maintainer will review this PR shortly.
@@ -178,5 +178,5 @@ Thank you for your contribution! The AI reviewer is temporarily unavailable. A m
 
 module.exports = {
   analyzeIssueAndRespond,
-  analyzePullRequest,
+  analyzePullRequest
 }
