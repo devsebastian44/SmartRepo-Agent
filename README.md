@@ -11,6 +11,9 @@
 
 ## 🧠 Overview
 
+> [!IMPORTANT]
+> Este proyecto tiene únicamente fines educativos y éticos en materia de ciberseguridad.
+
 **SmartRepo Agent** es un bot de automatización inteligente para GitHub construido sobre **Node.js 18+ y Express**, que escucha eventos de webhooks en tiempo real para realizar dos funciones principales de forma completamente autónoma: **clasificar y etiquetar issues** mediante análisis de palabras clave y una capa de IA (OpenAI o modelos compatibles como Groq, Gemini u OpenRouter), y **revisar Pull Requests** detectando malas prácticas, diffs excesivos, ausencia de tests y descripciones ambiguas.
 
 A partir del análisis de la estructura del repositorio (`app.js`, `src/`, `configs/`, `.env.example`, `babel.config.js`, `nodemon.json`, `.eslintrc.json`, `prettier.config.js`, `docker-compose.yml`, `.nvmrc`) y de los archivos de configuración detectados, el sistema opera como un servidor web Express que expone un endpoint de webhooks (`POST /webhooks/github`) con verificación criptográfica de firmas HMAC-SHA256 sobre cada petición entrante, un endpoint de salud (`GET /health`), logging estructurado con Winston, rate limiting por defecto y soporte para múltiples repositorios mediante lista de permitidos configurable.
@@ -386,6 +389,20 @@ Posibles extensiones identificadas desde la arquitectura y las capacidades del s
 - [ ] **Modo dry-run** — Variable `DRY_RUN=true` que procese los eventos y loguee las acciones que tomaría sin aplicar etiquetas ni publicar comentarios reales.
 - [ ] **Configuración por repositorio** — Soporte para un archivo `.smartrepo.yml` en el repositorio objetivo que defina reglas, etiquetas y umbrales personalizados por proyecto.
 - [ ] **Caché de respuestas IA** — Implementar caché con TTL sobre respuestas del LLM para issues con contenido muy similar, reduciendo costos de API.
+
+---
+
+## 🤝 Contributing
+
+¡Las contribuciones son bienvenidas! Si deseas mejorar el SmartRepo Agent, por favor sigue estos pasos:
+
+1. **Fork** el repositorio.
+2. Crea una rama para tu característica: `git checkout -b feature/nueva-caracteristica`.
+3. Realiza tus cambios y asegúrate de que los tests pasen: `npm test`.
+4. Sigue la convención de **Conventional Commits** para tus mensajes.
+5. Abre un **Pull Request** hacia la rama `main`.
+
+Para más detalles, consulta nuestra [Guía de Contribución](CONTRIBUTING.md).
 
 ---
 
