@@ -14,7 +14,7 @@ const logger = require('./logger')
  * @param {string} signature – Value of the `X-Hub-Signature-256` header
  * @returns {boolean}
  */
-function verifySignature (rawBody, signature) {
+function verifySignature(rawBody, signature) {
   if (!signature) {
     logger.warn('Webhook rejected: missing X-Hub-Signature-256 header')
     return false

@@ -33,7 +33,7 @@ const logger = createLogger({
       filename: path.join(LOG_DIR, 'combined.log'),
       maxsize: 10 * 1024 * 1024, // 10 MB
       maxFiles: 5,
-      tailable: true
+      tailable: true,
     }),
     // Errors only → error.log
     new transports.File({
@@ -41,16 +41,16 @@ const logger = createLogger({
       level: 'error',
       maxsize: 5 * 1024 * 1024,
       maxFiles: 3,
-      tailable: true
-    })
-  ]
+      tailable: true,
+    }),
+  ],
 })
 
 // Console transport for non-production environments
 if (process.env.NODE_ENV !== 'production') {
   logger.add(
     new transports.Console({
-      format: combine(colorize({ all: true }), timestamp({ format: 'HH:mm:ss' }), consoleFormat)
+      format: combine(colorize({ all: true }), timestamp({ format: 'HH:mm:ss' }), consoleFormat),
     })
   )
 }

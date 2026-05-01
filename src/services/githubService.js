@@ -15,8 +15,8 @@ const octokit = new Octokit({
     debug: msg => logger.debug(msg),
     info: msg => logger.info(msg),
     warn: msg => logger.warn(msg),
-    error: msg => logger.error(msg)
-  }
+    error: msg => logger.error(msg),
+  },
 })
 
 // ── Comments ──────────────────────────────────────────────────────────────────
@@ -24,13 +24,13 @@ const octokit = new Octokit({
 /**
  * Post a comment on an issue or PR.
  */
-async function createComment ({ owner, repo, issueNumber, body }) {
+async function createComment({ owner, repo, issueNumber, body }) {
   try {
     const { data } = await octokit.issues.createComment({
       owner,
       repo,
       issue_number: issueNumber,
-      body
+      body,
     })
     logger.info(`💬 Comment posted on #${issueNumber}`, { owner, repo, commentId: data.id })
     return data
@@ -45,7 +45,7 @@ async function createComment ({ owner, repo, issueNumber, body }) {
 /**
  * Ensure a label exists in the repo (creates it if missing).
  */
-async function ensureLabelExists ({ owner, repo, name, color, description }) {
+async function ensureLabelExists({ owner, repo, name, color, description }) {
   try {
     await octokit.issues.getLabel({ owner, repo, name })
   } catch (err) {
@@ -62,12 +62,12 @@ async function ensureLabelExists ({ owner, repo, name, color, description }) {
  * Apply an array of label names to an issue / PR.
  * Ensures each label exists first.
  */
-async function addLabels ({ owner, repo, issueNumber, labels }) {
+async function addLabels({ owner, repo, issueNumber, labels }) {
   try {
     const { data: existing } = await octokit.issues.listLabelsForRepo({
       owner,
       repo,
-      per_page: 100
+      per_page: 100,
     })
     const existingNames = new Set(existing.map(l => l.name))
 
@@ -81,13 +81,13 @@ async function addLabels ({ owner, repo, issueNumber, labels }) {
       owner,
       repo,
       issue_number: issueNumber,
-      labels: labels.map(l => l.name)
+      labels: labels.map(l => l.name),
     })
 
     logger.info(`🏷️  Labels applied to #${issueNumber}`, {
       owner,
       repo,
-      labels: labels.map(l => l.name)
+      labels: labels.map(l => l.name),
     })
   } catch (err) {
     logger.error('Failed to add labels', { error: err.message, owner, repo, issueNumber })
@@ -100,7 +100,7 @@ async function addLabels ({ owner, repo, issueNumber, labels }) {
 /**
  * Fetch a single issue.
  */
-async function getIssue ({ owner, repo, issueNumber }) {
+async function getIssue({ owner, repo, issueNumber }) {
   const { data } = await octokit.issues.get({ owner, repo, issue_number: issueNumber })
   return data
 }
@@ -110,12 +110,12 @@ async function getIssue ({ owner, repo, issueNumber }) {
 /**
  * Get list of files changed in a PR.
  */
-async function getPullRequestFiles ({ owner, repo, pullNumber }) {
+async function getPullRequestFiles({ owner, repo, pullNumber }) {
   const { data } = await octokit.pulls.listFiles({
     owner,
     repo,
     pull_number: pullNumber,
-    per_page: 100
+    per_page: 100,
   })
   return data
 }
@@ -123,7 +123,7 @@ async function getPullRequestFiles ({ owner, repo, pullNumber }) {
 /**
  * Fetch PR details.
  */
-async function getPullRequest ({ owner, repo, pullNumber }) {
+async function getPullRequest({ owner, repo, pullNumber }) {
   const { data } = await octokit.pulls.get({ owner, repo, pull_number: pullNumber })
   return data
 }
@@ -134,5 +134,5 @@ module.exports = {
   ensureLabelExists,
   getIssue,
   getPullRequestFiles,
-  getPullRequest
+  getPullRequest,
 }

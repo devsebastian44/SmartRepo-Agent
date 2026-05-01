@@ -19,7 +19,7 @@ const logger = require('../utils/logger')
  * Handles the `issues.opened` event.
  * @param {object} payload – Full GitHub webhook payload
  */
-async function handleIssueOpened (payload) {
+async function handleIssueOpened(payload) {
   const { repository, issue } = payload
 
   const owner = repository.owner.login
@@ -44,7 +44,7 @@ async function handleIssueOpened (payload) {
       const aiResponse = await aiService.analyzeIssueAndRespond({
         title,
         body,
-        classification: type
+        classification: type,
       })
 
       const commentBody = buildIssueComment({ type, confidence, aiResponse })
@@ -57,7 +57,7 @@ async function handleIssueOpened (payload) {
       owner,
       repo,
       error: err.message,
-      stack: err.stack
+      stack: err.stack,
     })
     // Don't re-throw – we don't want the webhook to retry for app-level errors
   }
@@ -66,7 +66,7 @@ async function handleIssueOpened (payload) {
 /**
  * Handles the `issue_comment.created` event (ignores bot comments).
  */
-async function handleIssueComment (payload) {
+async function handleIssueComment(payload) {
   const { comment, repository, issue } = payload
 
   // Ignore comments made by bots (including ourselves)
@@ -88,7 +88,7 @@ async function handleIssueComment (payload) {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function buildIssueComment ({ type, confidence, aiResponse }) {
+function buildIssueComment({ type, confidence, aiResponse }) {
   const typeEmoji = {
     bug: '🐛',
     feature: '✨',
@@ -96,7 +96,7 @@ function buildIssueComment ({ type, confidence, aiResponse }) {
     documentation: '📚',
     performance: '⚡',
     security: '🔒',
-    unknown: '🔍'
+    unknown: '🔍',
   }
 
   const emoji = typeEmoji[type] || '🔍'
@@ -106,7 +106,7 @@ function buildIssueComment ({ type, confidence, aiResponse }) {
     '',
     `> **Classification:** \`${type}\` (${confidence}% confidence)`,
     '',
-    aiResponse
+    aiResponse,
   ].join('\n')
 }
 
