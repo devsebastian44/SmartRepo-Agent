@@ -39,6 +39,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.29.2",
     "eslint": "^8.57.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-config-standard": "^17.1.0",
     "husky": "^9.1.7",
     "jest": "^30.3.0",

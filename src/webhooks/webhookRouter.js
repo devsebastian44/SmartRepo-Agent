@@ -53,7 +53,7 @@ router.post('/github', async (req, res) => {
   setImmediate(() => routeEvent(event, payload))
 })
 
-async function routeEvent (event, payload) {
+async function routeEvent(event, payload) {
   try {
     switch (event) {
       case 'issues':

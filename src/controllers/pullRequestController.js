@@ -18,7 +18,7 @@ const logger = require('../utils/logger')
 /**
  * Handles `pull_request.opened` and `pull_request.synchronize` events.
  */
-async function handlePullRequestOpened (payload) {
+async function handlePullRequestOpened(payload) {
   const { repository, pull_request: pr } = payload
 
   const owner = repository.owner.login
@@ -42,7 +42,7 @@ async function handlePullRequestOpened (payload) {
         owner,
         repo,
         issueNumber: pullNumber,
-        labels: [LABELS.AI_REVIEWED]
+        labels: [LABELS.AI_REVIEWED],
       })
     }
 
@@ -60,7 +60,7 @@ async function handlePullRequestOpened (payload) {
       owner,
       repo,
       error: err.message,
-      stack: err.stack
+      stack: err.stack,
     })
   }
 }
@@ -71,7 +71,7 @@ async function handlePullRequestOpened (payload) {
  * Runs fast, deterministic checks on the PR without touching the AI.
  * Returns an array of warning strings.
  */
-function runStaticChecks ({ pr, files }) {
+function runStaticChecks({ pr, files }) {
   const warnings = []
 
   // 1. Huge PR (hard to review)
@@ -128,9 +128,9 @@ function runStaticChecks ({ pr, files }) {
 
 // ── Comment Builder ───────────────────────────────────────────────────────────
 
-function buildPRComment ({ issues, aiReview, fileCount }) {
+function buildPRComment({ issues, aiReview, fileCount }) {
   const sections = [
-    `## 🤖 Automated PR Review\n\n> Reviewed **${fileCount} file(s)** changed in this PR.\n`
+    `## 🤖 Automated PR Review\n\n> Reviewed **${fileCount} file(s)** changed in this PR.\n`,
   ]
 
   if (issues.length > 0) {

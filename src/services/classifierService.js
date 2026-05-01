@@ -14,7 +14,7 @@ const logger = require('../utils/logger')
  * @param {{ title: string, body: string }} issue
  * @returns {{ type: string, confidence: number, label: object }}
  */
-function classifyIssue ({ title = '', body = '' }) {
+function classifyIssue({ title = '', body = '' }) {
   const text = `${title} ${body}`.toLowerCase()
   const scores = {}
 
@@ -38,7 +38,7 @@ function classifyIssue ({ title = '', body = '' }) {
     return {
       type: 'unknown',
       confidence: 0,
-      labels: [LABELS.AI_REVIEWED]
+      labels: [LABELS.AI_REVIEWED],
     }
   }
 
@@ -52,7 +52,7 @@ function classifyIssue ({ title = '', body = '' }) {
     question: LABELS.QUESTION,
     documentation: LABELS.DOCUMENTATION,
     performance: LABELS.PERFORMANCE,
-    security: LABELS.SECURITY
+    security: LABELS.SECURITY,
   }
 
   const primaryLabel = labelMap[topCategory] || LABELS.AI_REVIEWED
@@ -62,17 +62,17 @@ function classifyIssue ({ title = '', body = '' }) {
     title,
     type: topCategory,
     confidence: `${confidence}%`,
-    score: topScore
+    score: topScore,
   })
 
   return {
     type: topCategory,
     confidence,
-    labels: labelsToApply
+    labels: labelsToApply,
   }
 }
 
-function escapeRegex (string) {
+function escapeRegex(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
