@@ -3,7 +3,7 @@
 ![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=flat&logo=node.js&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-4.x-000000?style=flat&logo=express&logoColor=white)
 ![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?style=flat&logo=openai&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI%2FCD-2088FF?style=flat&logo=github-actions&logoColor=white)
 ![Jest](https://img.shields.io/badge/Testing-Jest-C21325?style=flat&logo=jest&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-brightgreen?style=flat)
 
@@ -15,7 +15,7 @@
 
 A partir del análisis de la estructura del repositorio (`app.js`, `src/`, `configs/`, `.env.example`, `babel.config.js`, `nodemon.json`, `.eslintrc.json`, `prettier.config.js`, `docker-compose.yml`, `.nvmrc`) y de los archivos de configuración detectados, el sistema opera como un servidor web Express que expone un endpoint de webhooks (`POST /webhooks/github`) con verificación criptográfica de firmas HMAC-SHA256 sobre cada petición entrante, un endpoint de salud (`GET /health`), logging estructurado con Winston, rate limiting por defecto y soporte para múltiples repositorios mediante lista de permitidos configurable.
 
-El proyecto sigue una arquitectura **DevSecOps** con separación entre el laboratorio técnico completo en GitLab (con tests, configuraciones y pipeline CI/CD privados) y el portafolio público sanitizado en GitHub, orquestada mediante el script `scripts/publish_public.ps1`.
+El proyecto sigue una arquitectura profesional con integración nativa en GitHub, utilizando un flujo de trabajo optimizado para la automatización de issues y Pull Requests.
 
 ---
 
@@ -52,8 +52,7 @@ El proyecto sigue una arquitectura **DevSecOps** con separación entre el labora
 | Dev server | Nodemon |
 | Contenerización | Docker + docker-compose |
 | Gestión de versiones Node | nvm (`.nvmrc`) |
-| Pipeline CI/CD | GitLab CI (`.gitlab-ci.yml`) |
-| Pipeline sanitización | PowerShell (`publish_public.ps1`) |
+| Pipeline CI/CD | GitHub Actions |
 | Proceso en producción | PM2 |
 | Proxy inverso (producción) | NGINX |
 
@@ -271,7 +270,6 @@ SmartRepo-Agent/
 └── package-lock.json              # Lockfile de dependencias
 ```
 
-> 📌 La versión completa en GitLab incluye adicionalmente: `configs/` (definición de etiquetas `labels.js` y validación), `tests/` (suite Jest completa, TDD/BDD), `scripts/publish_public.ps1` (pipeline de sanitización) y `.gitlab-ci.yml` (CI/CD con tests, linting y auditoría npm).
 
 ---
 
@@ -373,40 +371,6 @@ El pipeline CI/CD en GitLab ejecuta `npm audit` en cada push, detectando vulnera
 
 ---
 
-## 🌐 Repository Architecture
-
-Este proyecto sigue una arquitectura distribuida con separación estricta de entornos:
-
-- **GitHub** — Portafolio técnico público: código fuente principal, documentación, diagramas de arquitectura y guías de configuración, en versión sanitizada
-- **GitLab** — Laboratorio técnico completo: suite de tests Jest, configuraciones de etiquetas, pipeline CI/CD privado y scripts de automatización DevSecOps
-
-### Pipeline DevSecOps (GitLab → GitHub)
-
-```
-[GitLab — Source of Truth]
-         │
-         ▼
-  [Pipeline CI/CD — .gitlab-ci.yml]
-    · npm install + npm audit    (auditoría de dependencias)
-    · ESLint + Prettier check    (calidad de código)
-    · Jest --coverage            (suite de tests + cobertura)
-         │
-         ▼
-  [scripts/publish_public.ps1 — Sanitización]
-    · Elimina tests/ (suite Jest privada)
-    · Elimina configs/ (labels.js y validadores)
-    · Elimina scripts/ (automatizaciones internas)
-    · Filtra .gitlab-ci.yml del pipeline privado
-    · Genera rama huérfana `public` limpia
-    · Push forzado controlado → GitHub main
-         │
-         ▼
-[GitHub — Versión Pública Sanitizada]
-```
-
-### 🔗 Full Source Code
-
-👉 Código completo disponible en GitLab: [https://gitlab.com/group-data-ia-lab/SmartRepo-Agent](https://gitlab.com/group-data-ia-lab/SmartRepo-Agent)
 
 ---
 
